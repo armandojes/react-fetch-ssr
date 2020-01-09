@@ -1,0 +1,21 @@
+{
+  "name": "react-fetch-ssr",
+  "version": "3.1.0",
+  "description": "react-fetch-ssr for serverSideRender",
+  "main": "dist/index.jsx",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "ssr",
+    "react",
+    "redux",
+    "serverRender"
+  ],
+  "author": "armandojes",
+  "license": "MIT",
+  "devDependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  }
+}
