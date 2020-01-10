@@ -8,7 +8,7 @@ function createStatesServer(){
     collected: false,
 
     /**
-     * @param initial_state
+     * @params initial_state
      * @returns [state, updater]
      * create a new state and add to list_states
      * private function
@@ -21,7 +21,7 @@ function createStatesServer(){
 
 
     /**
-     * @param initial_state
+     * @params initial_state
      * @returns [state, updater]
      * return latest state if exist or create a new state
     **/
@@ -34,7 +34,7 @@ function createStatesServer(){
     },
 
      /**
-     * @param initial_state
+     * @params initial_state
      * @returns [state, updater]
      * create a new state and add to list_states
     **/
