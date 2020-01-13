@@ -1,21 +1,42 @@
 {
-  "name": "react-fetch-ssr",
-  "version": "3.1.0",
-  "description": "react-fetch-ssr for serverSideRender",
-  "main": "dist/index.jsx",
+  "name": "react-server-test",
+  "version": "1.0.2",
+  "description": "help to make server side render",
+  "main": "dist/index.js",
+  "umd:main": "dist/index.umd.js",
+  "module": "dist/index.mjs",
+  "src": "./source/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/armandojes/react-fetch-ssr"
+  },
   "scripts": {
-    "test": "test"
+    "build": "microbundle",
+    "prepublish": "npm run build"
   },
   "keywords": [
-    "ssr",
     "react",
-    "redux",
-    "serverRender"
+    "ssr",
+    "serverRender",
+    "hooks"
   ],
-  "author": "armandojes",
+  "author": "Armando de jesus (https://armandodejesus.now.sh)",
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {},
+  "peerDependencies": {
     "react": "^16.12.0",
     "react-dom": "^16.12.0"
-  }
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "microbundle": "^0.11.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "files": [
+    "dist",
+    "package.json",
+    "README.md"
+  ]
 }
