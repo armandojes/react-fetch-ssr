@@ -1,7 +1,6 @@
 import React from 'react'
 import Context  from './context';
 
-
 function Provider(props) {
 
   const value = {
@@ -12,7 +11,7 @@ function Provider(props) {
   return (
     <Context.Provider 
       value={value}>
-      {children}
+      {props.children}
     </Context.Provider>
   )
 }

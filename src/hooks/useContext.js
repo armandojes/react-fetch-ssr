@@ -4,7 +4,7 @@ import React from 'react'
 
 export function useSsrContext() {
   const contextValue = React.useContext(Context);
-  return contextValue
+  return contextValue;
 }
 
 export default useSsrContext;

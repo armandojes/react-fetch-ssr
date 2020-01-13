@@ -4,7 +4,8 @@ import useSsrContext from '../hooks/useContext';
 
 
 function useFetch(handler, array){
-  if (isDom()){
+  
+  if (isDom){
     return array
     ? React.useEffect(() => {handler()}, array)
     : React.useEffect(() => {handler()});

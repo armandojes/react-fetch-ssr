@@ -1,7 +1,7 @@
 function createFetchsServer (){
   const fetchs = {
-    list_fetchs = [],
 
+    list_fetchs: [],
 
     /**
      * @params async function
@@ -9,20 +9,12 @@ function createFetchsServer (){
      * add a new handler to list_fetch
      */
     useFetch (handler){
-      this.list_fetchs.push(async () => {
-        try {
-          await handler();
-        } catch (error) {
-          if (process.env.NODE_ENV !== 'production')
-          console.log(error);
-        }
-      });
+      this.list_fetchs.push(handler);
     },
 
-
     /**
-     * @param async function
-     * @returns any
+     * @params any
+     * @returns promise
      * execute fetchs
     */
     async execute(){
@@ -32,3 +24,5 @@ function createFetchsServer (){
 
   return fetchs;
 }
+
+export default createFetchsServer;

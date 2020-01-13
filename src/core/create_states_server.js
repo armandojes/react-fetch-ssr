@@ -1,5 +1,4 @@
 import newObjectState from './new_object_state';
-import { useState } from 'react';
 
 function createStatesServer(){
   const states = {
@@ -19,11 +18,10 @@ function createStatesServer(){
       return [state_created.state, state_created.updater];
     },
 
-
     /**
      * @params initial_state
      * @returns [state, updater]
-     * return latest state if exist or create a new state
+     * return latest state if exist or create a new state;
     **/
     getState(initial_state){
       const currect_state = this.list_states[this.state_index];
@@ -40,7 +38,7 @@ function createStatesServer(){
     **/
     useState(initial_state){
       return this.collected 
-      ? this.get_state(initial_state)
+      ? this.getState(initial_state)
       : this.newState(initial_state);
     },
 
