@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@babel/preset-react": "^7.0.0",
-    "microbundle": "^0.11.0",
+    "microbundle": "^0.11.0"
   },
   "files": [
     "dist",
