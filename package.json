@@ -1,6 +1,6 @@
 {
   "name": "react-fetch-ssr",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "serverSideRender for reactJs",
   "main": "dist/index.js",
   "umd:main": "dist/index.umd.js",
