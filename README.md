@@ -7,7 +7,10 @@ Por ejemplo cuando un usuario accede por primera vez a aplicación web isomórfi
 
 ## El problema con las aplicaciones web isomórficas
 Entonces, ¿Si las aplicaciones web **isomorficas** son tan geniales porque no las implementa todo el mundo ? La respuesta a esta pregunta es porque el desarrollo de estas aplicaciones son a menudo muy complejas. 
+
 El problema principal tiene que ver con el Fetch de datos hacia una **API**, es decir cuando un componente necesita conectarse a una **API** para obtener datos, y la verdad es que casi todas las aplicaciones web en el mundo real necesitan conectarse a una **API**.
+
+
 El problema ocurre básicamente porque no tenemos una forma de conectarnos a una **API** desde los componentes en el lado del servidor, en el lado del cliente esto lo hacemos fácilmente con **componentDidMount** o **useEffect**, pero estos métodos no funcionan cuando el render ocurre en el servidor.
 
 ## Entendiendo el problema
@@ -40,11 +43,12 @@ Vamos entender mejor la naturaleza de este problema con un componente real simpl
   }
   
 ``` 
-El componente anterior muestra un mensaje **"Cargando shows..."** mientras esperamos la respuesta del **API**, cuando dicha respuesta llegue el componente se actualiza mostrando una lista de títulos de los shows, esto funciona perfecto en el lado del cliente pero no en el servidor.
+El componente anterior muestra un mensaje **"Cargando shows..."** mientras esperamos la respuesta del **API**, cuando dicha respuesta llegue el componente se actualiza mostrando una lista de títulos de los shows. Esto funciona perfecto en el lado del cliente pero no en el servidor.
 
-Como se habrán dado cuenta  declaramos la función **fetchShows** primero y luego lo ejecutamos dentro de la función que le pasamos a **useEffect**, esto tiene que ser así debido a que la función que le pasamos a **useEffect** no puede ser asíncrona, ya que las funciones asíncronas retornan una **promesa** y **useEffect** espera que retornemos una función normal para ejecutarla cuando el componente se desmonte o no retornar nada.
+Como se habrán dado cuenta  declaramos la función **fetchShows** primero y luego lo ejecutamos dentro de la función que le pasamos a **useEffect**, esto tiene que ser así debido a que la función que le pasamos a **useEffect** no puede ser asíncrona ya que las funciones asíncronas retornan una **promesa** y **useEffect** espera que retornemos una función normal para ejecutarla cuando el componente se desmonte o no retornar nada.
 
 Ahora ¿ Que ocurre cuando renderizamos este componente en el servidor con **renderToString** ? Como ya te habrás imaginado el servidor solo renderiza el componente con el mensaje **"Cargando shows..."**, esto es porque el servidor no ejecuta **useEffect** y por lo tanto la petición al **API** nunca ocurre. 
+
 Aunque **useEffect** se ejecute en el servidor no sería posible esperar la respuesta del API antes de renderizar el componente debido a que **renderToString** no es una función asíncrona. 
 
 Pero este no es el comportamiento que esperamos, nosotros queremos que el servidor nos renderize el componente con la lista de shows obtenidos a través del **API**, ese el el objetivo de hacer render en el lado del servidor.
@@ -102,7 +106,7 @@ import reactFetchSsr from 'react-fetch-ssr';
 
 ```
 ## implementación 
-En resumen para que nuestra aplicación pueda realizar peticiones al **API** de la misma forma en el lado del cliente y en el lado del servidor tenemos que seguir estas reglas.
+Entonces para que nuestra aplicación pueda realizar peticiones al **API** de la misma forma en el lado del cliente y en el lado del servidor tenemos que seguir estas reglas.
 - Usar la función **useState** propia de **react-fetch-ssr** en lugar de la función que nos exporta react.
 - Realizar las peticiones al **API** usando **useFetch** en lugar de useEffect
 - En el servidor usar la función **renderToStringAsync** en lugar de la función **renderToString** propia de react.
@@ -169,21 +173,21 @@ El segundo ejemplo será renderizado desde el servidor con la lista de títulos 
 Esto es porque la función que le pasamos a **useFetch** es asíncrona y podemos usar **await** en el cuepo de la funcion directamente: 
 
 ```jsx
-  //con useEffect
-  async function fetchShows(){
-    const response = await axios({});
-    setState(response.data);
-  }
-  useEffect(() => {
-    fetchShows();
-  },[]);
+//con useEffect
+async function fetchShows(){
+  const response = await axios({});
+  setState(response.data);
+}
+useEffect(() => {
+  fetchShows();
+},[]);
 
 
-  // con useFetch
-  useFetch(async () => {
-    const response = await axios({});
-    setState(response.data);
-  },[]);
+// con useFetch
+useFetch(async () => {
+  const response = await axios({});
+  setState(response.data);
+},[]);
 ```
 
 ## Código del servidor:
@@ -252,7 +256,9 @@ Ahora tenemos tenemos que inyectar el estado de los componentes devuelto por **r
 ## ¿Qués Markup y renderToStaticMarkup ?
 **Markup** es el html básico que envuelve nuestra aplicación react, es equivalente al **index.html** en una **SPA**, 
 
-En el servidor necesitamos inyectar el código HTML generado por **renderToString** o **renderToStringAsync** dentro de nuestro HTML contenedor y tenemos dos formas de hacerlo, crear nuestro **Markup** como un componente de react o como una función simple.
+En el servidor necesitamos inyectar el código HTML generado por **renderToString** o **renderToStringAsync** dentro de nuestro HTML contenedor y tenemos dos formas de hacerlo: 
+- crear **Markup** como un componente de react 
+- crear **Markup** como una función simple.
 
 ### Markup como un componente 
 Este es un componente básico contenedor
@@ -262,7 +268,7 @@ Este es un componente básico contenedor
       <html  lang="en">
         <head>
           <link  rel="stylesheet" href="/styles.css">
-          <title>Document</title>
+          <title>my title</title>
         </head>
         <boy>
           <div id="render_target" dangerouslySetInnerHTML={{__html: props.content}}></div>
@@ -276,51 +282,51 @@ Este componente **Markup** recibe como **prop** el contenido de nuestra aplicaci
 
 **Nota:** usamos la propiedad **dangerouslySetInnerHTML** porque react por defecto escapa las cadenas HTML por ejemplo esto
 ```jsx
-  <div id="render_targte">{props.content}</div>
+ <div id="render_targte">{props.content}</div>
 ```
-Haría que el HTML se lea literalmente en pantalla como texto plano, para evitar esto debemos usar **dangerouslySetInnerHTML**  como en el siguiente ejemplo:
+Haría que el HTML se lea literalmente en pantalla como texto plano, para evitar esto debemos usar **dangerouslySetInnerHTML**  asi:
 ```jsx
-  <div id="render_target" dangerouslySetInnerHTML={{__html: props.content}}></div>
+ <div id="render_target" dangerouslySetInnerHTML={{__html: props.content}}></div>
 ```
 
-Ahora ¿como sincronizamos el estado del servidor al cliente? simplemente debemos colocar el script **states** justo antes de cargar nuestra **bundle.js**, debemos colocarlo entre las etiquetas **< script  >** y usando **dangerouslySetInnerHTML** para react no lo escapee!
+Ahora ¿como sincronizamos el estado del servidor al cliente? simplemente debemos colocar el script **states** justo antes de cargar nuestra **bundle.js**, debemos colocarlo entre las etiquetas **< script  >** y usando **dangerouslySetInnerHTML** para que react no lo escapee!
 ```jsx
-  <body>
-    <div id="render_target" dangerouslySetInnerHTML={{__html: props.content}}></div>
-    <script dangerouslySetInnerHTML={__html: props.states}></script>
-    <script  src="/bundle.js"></script>
-  </body>
+<body>
+  <div id="render_target" dangerouslySetInnerHTML={{__html: props.content}}></div>
+  <script dangerouslySetInnerHTML={__html: props.states}></script>
+  <script  src="/bundle.js"></script>
+</body>
 ```
 
 Ahora solo debemos renderizarlo de la siguiente forma
 ```jsx
-  const full_html = renderToStaticMarkup(<Markup content={content} states={states} />);
+ const full_html = renderToStaticMarkup(<Markup content={content} states={states} />);
 ```
 ### Markup como una función
-Ahora veamos un ejemplo con una función, 
+Ahora veamos un ejemplo con una función simple, 
 ```javascript
-  function markup (content, states){
-    return 
-    `<html  lang="en">
-      <head>
-        <link  rel="stylesheet" href="/styles.css">
-        <title>Document</title>
-      </head>
-      <boy>
-        <div id="render_target" >${content}</div>
-        <script>${states}</script>
-        <script  src="/bundle.js"></script>
-      </body>
-    </html>`;
-  }
+function markup (content, states){
+  return 
+  `<html  lang="en">
+    <head>
+      <link  rel="stylesheet" href="/styles.css">
+      <title>my title</title>
+    </head>
+    <boy>
+      <div id="render_target" >${content}</div>
+      <script>${states}</script>
+      <script  src="/bundle.js"></script>
+    </body>
+  </html>`;
+}
 ```
-con una función no necesitamos usar **dangerouslySetInnerHTML** ni **renderToStaticMarkup** ya que no es un componente de react si no una función que retorna un string.
+Con una función no necesitamos usar **dangerouslySetInnerHTML** ni **renderToStaticMarkup** ya que no es un componente de react si no una función que retorna un string.
 
 Lo ejecutamos de la siguiente forma:
 ```jsx
-  const full_html = markup(content, states);
+ const full_html = markup(content, states);
 ```
-Cualquiera de las dos formas funciona exactamente de la misma forma.
+
 
 ## ¿ Porque necesitamos enviar el estado del servidor al cliente ?
 Cuando renderizamos nuestra aplicación en el servidor obtenemos como resultado un string HTML y lo enviamos al cliente, en el lado del cliente React va a volver a renderizar los componentes con el estado inicial sin memorizar el estado que tenía los componentes en el servidor, generando como resultado un HTML diferente, en estos casos react va a descartar el HTML del servidor y volverá a generar todo desde cero en el lado del cliente.
@@ -364,7 +370,7 @@ En el caso de nuestro componente **ListShows** tenemos que hacer que la variable
 Esto es justamente lo que hace el script **states** retornado por **renderToStringAsync** como ya hemos visto en ejemplos anteriores, **react-fetch-ssr** se encarga de serializar el estado de los componentes en el servidor e hidratarlo en el cliente...
 
 ## compatible con react-router
-Esta librería ha sido desarrollado para trabajar de la mano con **react-router** y este es una de las grandes ventajas ya que no necesitas usar **react-router-config** y declara rutas estáticas, puedes seguir desarrollado con los componentes **Switch** y **Route**
+Esta librería ha sido desarrollado para trabajar de la mano con **react-router** y este es una de las grandes ventajas, ya que no necesitas usar **react-router-config** y declara rutas estáticas, puedes seguir desarrollado con los componentes **Switch** y **Route**
 
 ### Ejemplo de uso básico con react-router
 - App.jsx
