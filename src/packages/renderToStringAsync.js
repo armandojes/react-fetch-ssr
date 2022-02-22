@@ -15,8 +15,7 @@ async function renderToStringAsync (react_app){
   states.set_collected();
   const content = ReacDomServer.renderToString(<App_enhanced />);
   const preloaded_states = states.getStates();
-  const script = `window.__SSR__STATES__ = ${JSON.stringify(preloaded_states)}`;
-  return {content, states: script};
+  return {content,  preloaded_states};
 }
 
 export default renderToStringAsync;
