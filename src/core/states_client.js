@@ -6,9 +6,11 @@ if (isDom){
     state_index: 0,
 
     getState(){
+      
       const current_state = this.preloaded_state[this.state_index] 
         ? this.preloaded_state[this.state_index]
         : null;
+      console.log('get state executed', this.state_index);
       this.state_index++;
       return current_state
     }

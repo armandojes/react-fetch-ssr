@@ -1,4 +1,4 @@
-import ReacDomServer from 'react-dom/server';
+import ReacDomServer from 'react-dom/server.js';
 import React from 'react';
 import Provider from '../components/provider';
 import createStatesServer from '../core/create_states_server';
@@ -15,7 +15,7 @@ async function renderToStringAsync (react_app){
   states.set_collected();
   const content = ReacDomServer.renderToString(<App_enhanced />);
   const preloaded_states = states.getStates();
-  return {content,  preloaded_states};
+  return {content,  preloaded_states: `window.__SSR__STATES__=${JSON.stringify(preloaded_states)}`};
 }
 
 export default renderToStringAsync;

@@ -8,10 +8,12 @@ function useState (initialState){
   
   if (isDom){
     const preloaded_state = client_states.getState();
-    return React.useState(preloaded_state || initialState);
+    const state = React.useState(preloaded_state || initialState)
+    console.log('state library', state);
+    return state;
   }
   else {
-    const {states} = useSsrContext();
+    const { states } = useSsrContext();
     return states.useState(initialState);
   }
 }

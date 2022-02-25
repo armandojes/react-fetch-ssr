@@ -3,11 +3,11 @@ import React from 'react';
 import useSsrContext from '../hooks/useContext';
 
 
-function useFetch(handler, array){
+function useFetch(handler, deps){
   
   if (isDom){
-    return array
-    ? React.useEffect(() => {handler()}, array)
+    return deps
+    ? React.useEffect(() => {handler()}, deps)
     : React.useEffect(() => {handler()});
   }
   else {
